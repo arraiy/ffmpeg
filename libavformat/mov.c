@@ -2298,8 +2298,11 @@ FF_ENABLE_DEPRECATION_WARNINGS
             if (tmcd_ctx->tmcd_flags & 0x0008) {
                 int timescale = AV_RB32(st->codecpar->extradata + 8);
                 int framedur = AV_RB32(st->codecpar->extradata + 12);
-                st->avg_frame_rate.num *= timescale;
-                st->avg_frame_rate.den *= framedur;
+                // Fix for timecode issue with fprobe with red cameras.
+                //st->avg_frame_rate.num *= timescale;
+                //st->avg_frame_rate.den *= framedur;
+                st->avg_frame_rate.num = timescale;
+                st->avg_frame_rate.den = framedur;
 #if FF_API_LAVF_AVCTX
 FF_DISABLE_DEPRECATION_WARNINGS
                 st->codec->time_base.den *= timescale;
